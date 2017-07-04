@@ -179,9 +179,10 @@ void DescManip::fromString(cv::Mat &a, const std::string &s)
         memcpy(a.ptr<char>(0),&data[0],data.size());
     }
     else{
+        string version;
         int type,cols;
         stringstream ss(s);
-        ss >>type>>cols;
+        ss >>version>>type>>cols;//header contains three items,if miss the first,the value of cols is invalid and Mat::creat() will throw Exception
         a.create(1,  cols, type);
         if(type==CV_8UC1){
             unsigned char *p = a.ptr<unsigned char>();
