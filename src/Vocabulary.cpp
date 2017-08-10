@@ -21,7 +21,7 @@ Vocabulary::Vocabulary
 Vocabulary::Vocabulary
   (const std::string &filename): m_scoring_object(NULL)
 {
-  load(filename);
+    load(filename);
 }
 
 // --------------------------------------------------------------------------
@@ -1055,18 +1055,20 @@ void Vocabulary::load(const std::string &filename)
     uint64_t sig;//magic number describing the file
     ifile.read((char*)&sig,sizeof(sig));
     if (sig==88877711233) {//it is a binary file. read from it
+
         ifile.seekg(0,std::ios::beg);
         fromStream(ifile);
 
     }
-    else{
+    else{//yin:if it is none-binary Vocabulary,read it using OPencv or txt
         if ( filename.find(".txt")!=std::string::npos){
             //read from a text file (used in ORBSLAM2)
             load_fromtxt(filename);
         }
-        else{
+        else{//yin:none-binary dbow voc file ,read it using opencv
         cv::FileStorage fs(filename.c_str(), cv::FileStorage::READ);
-        if(!fs.isOpened()) throw std::string("Could not open file ") + filename;
+        if(!fs.isOpened()) throw std::runtime_error("file exits,But could not open file " + filename);
+        //yin:if file can be opened,do next
         this->load(fs);
         }
     }
