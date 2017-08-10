@@ -40,13 +40,14 @@ endif()
 
 #
 OPTION(BUILD_UTILS	"Set to OFF to not build utils" ON)
-OPTION(USE_CONTRIB 	"Set to ON if contrib are installed" OFF)
+OPTION(USE_CONTRIB 	"Set to ON if contrib are installed" ON)
 OPTION(BUILD_SHARED_LIBS 	"Set to OFF to build static libraries" ON)
 
 # ----------------------------------------------------------------------------
 #   Find Dependencies
 # ----------------------------------------------------------------------------
-find_package(OpenCV  REQUIRED)
+SET(OpenCV_DIR /opt/opencv3/share/OpenCV) #opencv 3.1.0
+find_package(OpenCV 3 REQUIRED)
 IF(USE_CONTRIB)
 add_definitions(-DUSE_CONTRIB)
 ENDIF()
@@ -56,9 +57,10 @@ if(NOT OpenCV_VERSION VERSION_LESS "3.0")
 ELSE()
     SET(OPENCV_VERSION_3 OFF)
 ENDIF()
-
-include_directories(${OpenCV_INCLUDE_DIRS})
-
+#include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(
+/opt/opencv3/include
+)
 SET(REQUIRED_LIBRARIES ${REQUIRED_LIBRARIES} ${OpenCV_LIBS})
 
 # ----------------------------------------------------------------------------
